@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { LOCAL_SERVER_PORT } from './config/config';
 import dbConnect from './config/db.config';
+import { Route } from './api/routers';
 
 // Constants
 const app = express();
@@ -18,6 +19,7 @@ app.use(bodyParser.json({ limit: '50mb', type: 'application/json' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // Routing Configuration
+app.use('/api/v1', Route);
 app.use('/uploads', express.static('uploads'));
 
 // Server and Database Connection
