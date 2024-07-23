@@ -4,6 +4,7 @@ import { UserModel } from '../../schemas';
 import { ApiError } from '../../utils/ErrorHandler';
 import { uploadOnCloudinary } from '../../utils/cloudinary';
 import { ApiResponse } from '../../utils/APIResponse';
+import { generateHashedPassword } from '../../utils/generateHashedPassword';
 
 export const registerUser = APIAsyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
@@ -26,7 +27,7 @@ export const registerUser = APIAsyncHandler(async (req, res) => {
     avatar: avatar.url,
     coverImage: coverImage?.url || '',
     email,
-    password,
+    password: await generateHashedPassword(password),
   };
 
   const user = await new UserModel(newUserPayload).save();
