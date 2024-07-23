@@ -4,7 +4,9 @@ import { UserModel } from '../../schemas';
 import { ApiError } from '../../utils/ErrorHandler';
 import { uploadOnCloudinary } from '../../utils/cloudinary';
 import { ApiResponse } from '../../utils/APIResponse';
-import { generateHashedPassword } from '../../utils/generateHashedPassword';
+import { generateHashedPassword, isPasswordCorrect } from '../../utils/AuthUtilities';
+import { generateAccessAndRefreshTokens } from '../../utils/JWT';
+import { cookieOptions } from '../../config/cookies.config';
 
 export const registerUser = APIAsyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
@@ -39,4 +41,40 @@ export const registerUser = APIAsyncHandler(async (req, res) => {
   return res
     .status(StatusCodes.CREATED)
     .json(new ApiResponse(StatusCodes.OK, newUserInstance, 'Successfully user has been registered!'));
+});
+
+export const loginUser = APIAsyncHandler(async (req, res) => {
+  const { email, username, password } = req.body;
+
+  const userInstance = await UserModel.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (!userInstance) throw new ApiResponse(StatusCodes.NOT_FOUND, 'N/A', 'User does not exisit!');
+
+  // checking the password is correct or not
+  const isPasswordValid = await isPasswordCorrect(userInstance.password, password);
+  if (!isPasswordValid) throw new ApiResponse(StatusCodes.UNAUTHORIZED, 'N/A', 'Invalid User Credentials!');
+
+  // Generate Access and Refresh Token
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(userInstance._id);
+
+  // Fetch the user without sensitive data
+  const loggedInUserInstance = await UserModel.findById(userInstance._id).select('-password -refreshToken');
+
+  return res
+    .status(StatusCodes.OK)
+    .cookie('accessToken', accessToken, cookieOptions)
+    .cookie('refreshToken', refreshToken, cookieOptions)
+    .json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          user: loggedInUserInstance,
+          accessToken,
+          refreshToken,
+        },
+        'User Logged in successfully!',
+      ),
+    );
 });

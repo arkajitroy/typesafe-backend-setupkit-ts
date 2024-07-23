@@ -14,3 +14,5 @@ UserRouter.route('/register').post(
   RouterMiddleware(routeValidators.users.registerUser),
   APIControllers.user.register,
 );
+
+UserRouter.route('/login').post(RouterMiddleware(routeValidators.users.loginUser), APIControllers.user.login);
