@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { IUserSchema } from '../@types/models/IUser';
+import { IUser, IUserSchema } from '../@types/models/IUser';
+import jwt from 'jsonwebtoken';
+import { JWT_ACCESS_TOKEN_SECRET_KEY, JWT_TOKEN_EXPIRY } from '../config/config';
 
 const userSchema: Schema = new Schema(
   {
@@ -49,6 +51,22 @@ const userSchema: Schema = new Schema(
     timestamps: true,
   },
 );
+
+userSchema.methods.generateAccessToken = (): string => {
+  const user = this as unknown as IUser;
+  return jwt.sign(
+    {
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      fullName: user.fullName,
+    },
+    JWT_ACCESS_TOKEN_SECRET_KEY,
+    {
+      expiresIn: JWT_TOKEN_EXPIRY,
+    },
+  );
+};
 
 // Create and export the User model
 const UsersModel = model<IUserSchema>('users', userSchema);
