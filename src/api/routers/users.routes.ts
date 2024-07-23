@@ -7,10 +7,10 @@ import { uploadMiddleware } from '../../middlewares/multer.middleware';
 export const UserRouter = Router();
 
 UserRouter.route('/register').post(
-  RouterMiddleware(routeValidators.users.registerUser),
   uploadMiddleware.fields([
     { name: 'avatar', maxCount: 1 },
     { name: 'coverImage', maxCount: 1 },
   ]),
+  RouterMiddleware(routeValidators.users.registerUser),
   APIControllers.user.register,
 );
