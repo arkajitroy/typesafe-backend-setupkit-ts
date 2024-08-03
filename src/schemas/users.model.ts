@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, Schema } from 'mongoose';
 import { IUser, IUserSchema } from '../@types/models/IUser';
 import jwt from 'jsonwebtoken';
 import { JWT_ACCESS_TOKEN_SECRET_KEY, JWT_TOKEN_EXPIRY } from '../config/config';
@@ -69,6 +69,6 @@ userSchema.methods.generateAccessToken = (): string => {
 };
 
 // Create and export the User model
-const UsersModel = model<IUserSchema>('users', userSchema);
+const UsersModel: Model<IUserSchema> = model<IUserSchema>('users', userSchema);
 
 export default UsersModel;
