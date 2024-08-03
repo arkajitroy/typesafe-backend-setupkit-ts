@@ -7,6 +7,9 @@ import { ApiResponse } from '../../utils/APIResponse';
 import { generateHashedPassword, isPasswordCorrect } from '../../utils/AuthUtilities';
 import { generateAccessAndRefreshTokens } from '../../utils/JWT';
 import { cookieOptions } from '../../config/cookies.config';
+import { UpdateQuery } from 'mongoose';
+import { IUser } from '../../@types/models/IUser';
+import { IAuthRequest } from '../../@types/others/TExpress';
 
 export const registerUser = APIAsyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
@@ -77,4 +80,21 @@ export const loginUser = APIAsyncHandler(async (req, res) => {
         'User Logged in successfully!',
       ),
     );
+});
+
+export const logoutUser = APIAsyncHandler(async (req, res) => {
+  const { user } = req as unknown as IAuthRequest;
+
+  const logoutMutationPayload: UpdateQuery<IUser> = {
+    $unset: { refreshToken: 1 },
+  };
+
+  // updating the user status
+  await UserModel.findByIdAndUpdate(user._id, logoutMutationPayload, { new: true });
+
+  return res
+    .status(StatusCodes.OK)
+    .clearCookie('accessToken', cookieOptions)
+    .clearCookie('refreshToken', cookieOptions)
+    .json(new ApiResponse(StatusCodes.OK, {}, 'User has been Logged Out!'));
 });

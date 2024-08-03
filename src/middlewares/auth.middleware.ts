@@ -4,10 +4,12 @@ import { APIAsyncHandler } from '../utils/APIAsyncHandler';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ApiError } from '../utils/ErrorHandler';
 import { UserModel } from '../schemas';
+import { IAuthRequest } from '../@types/others/TExpress';
 
-export const verifyJWT = APIAsyncHandler(async (req: Request, _: Response, next: NextFunction) => {
+export const verifyToken = APIAsyncHandler(async (req: Request, _: Response, next: NextFunction) => {
   try {
-    const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ', '');
+    const _req = req as unknown as IAuthRequest;
+    const token = _req.cookies?.accessToken || _req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
       throw new ApiError(401, 'Unauthorized request');
@@ -21,7 +23,7 @@ export const verifyJWT = APIAsyncHandler(async (req: Request, _: Response, next:
       throw new ApiError(401, 'Invalid Access Token');
     }
 
-    req.user = user;
+    _req.user = user;
     next();
   } catch (error: any) {
     throw new ApiError(401, error?.message || 'Invalid access token');
