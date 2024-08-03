@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { TObjectId } from '../others/TObjectId';
 
 // Interface for the User schema
-export interface IUserSchema extends Document {
+export interface IUserSchema {
   username: string;
   email: string;
   fullName: string;
