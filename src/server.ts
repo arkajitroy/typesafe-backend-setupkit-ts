@@ -7,6 +7,7 @@ import { CORS_RESTRICTED_ORIGIN, LOCAL_SERVER_PORT } from './config/app.config';
 import dbConnect from './config/db.config';
 import { Route } from './api/routers';
 import { requestLimiter } from './config/rateLimiter.config';
+import logger from './config/logger.config';
 
 // Constants
 const app = express();
@@ -28,11 +29,11 @@ app.use('/api/v1', Route);
 dbConnect()
   .then(() => {
     app.listen(LOCAL_SERVER_PORT, () => {
-      console.log('The Backend Server is running @PORT', LOCAL_SERVER_PORT);
+      logger.info('The Backend Server is running @PORT', LOCAL_SERVER_PORT);
     });
   })
   .catch((error: Error) => {
-    console.error('Failed to connect to the database:', error.message);
+    logger.error('Failed to connect to the database:', error.message);
   });
 
 // ============================== (Start the Server using Cluster, only for Big scale Application) ===================
