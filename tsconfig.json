@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "rootDir": "./",
-    "declaration": true
+    "declaration": true,
+    "typeRoots": ["./node_modules/@types", "src/types/declarations"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
