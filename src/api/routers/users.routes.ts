@@ -15,7 +15,13 @@ UserRouter.route('/register').post(
   RouterMiddleware(routeValidators.users.registerUser),
   APIControllers.user.register,
 );
-
 UserRouter.route('/login').post(RouterMiddleware(routeValidators.users.loginUser), APIControllers.user.login);
 UserRouter.route('/logout').post(verifyToken, APIControllers.user.logout);
+UserRouter.route('/reset-password').post(
+  verifyToken,
+  RouterMiddleware(routeValidators.users.resetPassword),
+  APIControllers.user.changePassword,
+);
 UserRouter.route('/refresh-token').post(APIControllers.user.refreshToken);
+UserRouter.route('/current-user').get(verifyToken, APIControllers.user.currentUser);
+UserRouter.route('/update-account').patch(verifyToken, APIControllers.user.updateProfile);

@@ -5,6 +5,7 @@ import {
   logoutUser,
   refreshAccessToken,
   registerUser,
+  updateAccountDetails,
 } from './user.controller';
 
 export const APIControllers = {
@@ -15,6 +16,6 @@ export const APIControllers = {
     changePassword: changeCurrentPassword,
     currentUser: getCurrentUser,
     refreshToken: refreshAccessToken,
-    // updateAccountDetails: updateAccountDetails,
+    updateProfile: updateAccountDetails,
   },
 };

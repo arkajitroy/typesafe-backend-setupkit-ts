@@ -157,6 +157,17 @@ export const refreshAccessToken = APIAsyncHandler(async (_req, res, next) => {
   }
 });
 
-// export const updateAccountDetails = APIAsyncHandler(async (req, res) => {
-//   const { fullName, email } = req.body;
-// });
+export const updateAccountDetails = APIAsyncHandler(async (req, res) => {
+  const { user } = req as unknown as IAuthRequest;
+  const { fullName, email } = req.body;
+
+  // profile updation
+  const userProfileUpdationPayload: UpdateQuery<IUser> = { $set: { fullName, email } };
+  const updatedProfileInformation = await UserModel.findByIdAndUpdate(user._id, userProfileUpdationPayload, {
+    new: true,
+  }).select('-password');
+
+  return res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { updatedProfileInformation }, 'Successfully profile updated!'));
+});
