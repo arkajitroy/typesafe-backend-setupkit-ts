@@ -1,27 +1,16 @@
+import fs from 'fs';
+import path from 'path';
 import winston, { format, transports } from 'winston';
+import { logColors, logLevels } from '../constants/logger.constants';
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  verbose: 4,
-  debug: 5,
-  silly: 6,
-};
-
-const logColors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  verbose: 'cyan',
-  debug: 'blue',
-  silly: 'grey',
-};
+// Ensure the log directory exists
+const logDir = 'logs';
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
+}
 
 const logger = winston.createLogger({
-  levels,
+  levels: logLevels,
   format: format.combine(
     format.timestamp(),
     format.errors({ stack: true }),
@@ -41,19 +30,19 @@ const logger = winston.createLogger({
     }),
     // File transport for production environment
     new transports.File({
-      filename: 'logs/combined.log',
+      filename: path.resolve(logDir, 'combined.log'),
       level: 'info', // Log levels for production
       format: format.combine(format.timestamp(), format.json()),
     }),
     new transports.File({
-      filename: 'logs/errors.log',
+      filename: path.resolve(logDir, 'errors.log'),
       level: 'error', // Only log errors
       format: format.combine(format.timestamp(), format.json()),
     }),
   ],
 });
 
-// assigned colorize to logger levels
+// Assigned colors to logger levels
 winston.addColors(logColors);
 
 export default logger;
