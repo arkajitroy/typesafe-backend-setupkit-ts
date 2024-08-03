@@ -18,3 +18,4 @@ UserRouter.route('/register').post(
 
 UserRouter.route('/login').post(RouterMiddleware(routeValidators.users.loginUser), APIControllers.user.login);
 UserRouter.route('/logout').post(verifyToken, APIControllers.user.logout);
+UserRouter.route('/refresh-token').post(APIControllers.user.refreshToken);

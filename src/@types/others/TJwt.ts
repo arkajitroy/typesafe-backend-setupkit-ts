@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jsonwebtoken';
+
 export interface TJwtPayload {
   _id: string;
   email: string;
@@ -9,3 +11,5 @@ export interface JWT {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface TJWTDecodedToken extends JwtPayload, TJwtPayload {}
