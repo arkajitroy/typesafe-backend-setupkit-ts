@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { CORS_RESTRICTED_ORIGIN, LOCAL_SERVER_PORT } from './config/app.config';
 import dbConnect from './config/db.config';
 import { Route } from './api/routers';
+import { requestLimiter } from './config/rateLimiter.config';
 
 // Constants
 const app = express();
@@ -18,6 +19,7 @@ app.use(compression());
 app.use(express.json({ limit: '200kb', type: 'application/json' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
+app.use(requestLimiter);
 
 // Routing Configuration
 app.use('/api/v1', Route);

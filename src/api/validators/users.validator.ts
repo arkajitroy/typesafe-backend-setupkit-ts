@@ -5,18 +5,18 @@ export const registerUser = z.object({
   username: z.string().min(3).max(30),
   email: z.string().email(),
   fullName: z.string().min(3).max(100),
-  password: z.string().min(8).max(30),
+  password: passwordFieldValidation,
 });
 
 export const loginUser = z.object({
   username: z.string().min(3).max(30),
   email: z.string().email(),
-  password: z.string().min(8).max(30),
+  password: passwordFieldValidation,
 });
 
 export const resetPassword = z.object({
-  oldPassword: z.string().min(8).max(30),
-  newPassword: z.string().min(8).max(30),
+  oldPassword: passwordFieldValidation,
+  newPassword: passwordFieldValidation,
 });
 
 export const updateProfile = z.object({
