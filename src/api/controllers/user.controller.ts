@@ -11,7 +11,7 @@ import { UpdateQuery } from 'mongoose';
 import { IUser } from '../../@types/models/IUser';
 import { IAuthRequest } from '../../@types/others/TExpress';
 import jwt from 'jsonwebtoken';
-import { JWT_REFRESH_TOKEN_SECRET_KEY } from '../../config/config';
+import { JWT_REFRESH_TOKEN_SECRET_KEY } from '../../config/app.config';
 import { TJWTDecodedToken } from '../../@types/others/TJwt';
 
 export const registerUser = APIAsyncHandler(async (req, res) => {

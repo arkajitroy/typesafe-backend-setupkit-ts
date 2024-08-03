@@ -1,6 +1,6 @@
 import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
 import { unlinkSync } from 'fs';
-import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from '../config/config';
+import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from '../config/app.config';
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD_NAME,

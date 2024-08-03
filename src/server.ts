@@ -3,7 +3,7 @@ import cors from 'cors';
 import compression from 'compression';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import { CORS_RESTRICTED_ORIGIN, LOCAL_SERVER_PORT } from './config/config';
+import { CORS_RESTRICTED_ORIGIN, LOCAL_SERVER_PORT } from './config/app.config';
 import dbConnect from './config/db.config';
 import { Route } from './api/routers';
 

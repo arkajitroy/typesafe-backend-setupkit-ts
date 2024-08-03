@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT, TJwtPayload } from '../@types/others/TJwt';
-import { JWT_ACCESS_TOKEN_SECRET_KEY, JWT_REFRESH_TOKEN_SECRET_KEY, JWT_TOKEN_EXPIRY } from '../config/config';
+import { JWT_ACCESS_TOKEN_SECRET_KEY, JWT_REFRESH_TOKEN_SECRET_KEY, JWT_TOKEN_EXPIRY } from '../config/app.config';
 import { Types } from 'mongoose';
 
 type TimeUnit = 's' | 'm' | 'h' | 'd';

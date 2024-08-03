@@ -5,7 +5,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ApiError } from '../utils/ErrorHandler';
 import { UserModel } from '../schemas';
 import { IAuthRequest } from '../@types/others/TExpress';
-import { JWT_ACCESS_TOKEN_SECRET_KEY } from '../config/config';
+import { JWT_ACCESS_TOKEN_SECRET_KEY } from '../config/app.config';
 
 export const verifyToken = APIAsyncHandler(async (req: Request, _: Response, next: NextFunction) => {
   try {
