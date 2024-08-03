@@ -5,6 +5,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ApiError } from '../utils/ErrorHandler';
 import { UserModel } from '../schemas';
 import { IAuthRequest } from '../@types/others/TExpress';
+import { JWT_ACCESS_TOKEN_SECRET_KEY } from '../config/config';
 
 export const verifyToken = APIAsyncHandler(async (req: Request, _: Response, next: NextFunction) => {
   try {
@@ -15,7 +16,7 @@ export const verifyToken = APIAsyncHandler(async (req: Request, _: Response, nex
       throw new ApiError(401, 'Unauthorized request');
     }
 
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as JwtPayload;
+    const decodedToken = jwt.verify(token, JWT_ACCESS_TOKEN_SECRET_KEY) as JwtPayload;
 
     const user = await UserModel.findById(decodedToken?._id).select('-password -refreshToken');
 
