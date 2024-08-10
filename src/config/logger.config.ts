@@ -10,12 +10,12 @@ winston.addColors(logColors);
 
 const logDirectory = path.resolve(__dirname, '../logs');
 try {
-  console.log('Checking if log directory exists:', logDirectory);
+  console.log('Checking if log directory exists [APPLICATION]');
   if (!fs.existsSync(logDirectory)) {
-    console.log('Log directory does not exist. Creating...');
+    // console.log('Log directory does not exist. Creating...');
     fs.mkdirSync(logDirectory, { recursive: true });
   } else {
-    console.log('Log directory already exists.');
+    // console.log('Log directory already exists.');
   }
 } catch (err) {
   console.error('Error while checking/creating log directory:', err);
