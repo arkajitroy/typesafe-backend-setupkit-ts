@@ -9,7 +9,7 @@ import { Route } from './api/routers';
 import { requestLimiter } from './config/rateLimiter.config';
 import logger from './config/logger.config';
 
-// Constants
+// constants
 const app = express();
 dotenv.config();
 
