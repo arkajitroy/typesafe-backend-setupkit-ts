@@ -8,7 +8,6 @@ import dbConnect from './config/db.config';
 import { Route } from './api/routers';
 import { requestLimiter } from './config/rateLimiter.config';
 import logger from './config/logger.config';
-import HTTPRequestLogger from './config/HTTPRequestLogger.config';
 
 // Constants
 const app = express();
@@ -16,7 +15,6 @@ dotenv.config();
 
 // middlewares-configuration
 app.use(cors({ credentials: true, origin: CORS_RESTRICTED_ORIGIN }));
-app.use(HTTPRequestLogger);
 app.use(express.json());
 app.use(compression());
 app.use(express.json({ limit: '200kb', type: 'application/json' }));
