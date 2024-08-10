@@ -17,7 +17,4 @@ const subscriptionSchema = new Schema<ISubscriptionSchema>(
   { timestamps: true },
 );
 
-export const Subscription: Model<ISubscriptionSchema> = model<ISubscriptionSchema>(
-  'Subscription',
-  subscriptionSchema,
-);
+export const Subscription: Model<ISubscriptionSchema> = model<ISubscriptionSchema>('subscriptions', subscriptionSchema);

@@ -1,4 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import { UpdateQuery } from 'mongoose';
 import { APIAsyncHandler } from '../../utils/APIAsyncHandler';
 import { UserModel } from '../../schemas';
 import { ApiError } from '../../utils/ErrorHandler';
@@ -7,10 +9,8 @@ import { ApiResponse } from '../../utils/APIResponse';
 import { generateHashedPassword, isPasswordCorrect } from '../../utils/AuthUtilities';
 import { generateAccessAndRefreshTokens } from '../../utils/JWT';
 import { cookieOptions } from '../../config/cookies.config';
-import { UpdateQuery } from 'mongoose';
 import { IUser } from '../../@types/models/IUser';
 import { IAuthRequest } from '../../@types/others/TExpress';
-import jwt from 'jsonwebtoken';
 import { JWT_REFRESH_TOKEN_SECRET_KEY } from '../../config/app.config';
 import { TJWTDecodedToken } from '../../@types/others/TJwt';
 
@@ -170,4 +170,44 @@ export const updateAccountDetails = APIAsyncHandler(async (req, res) => {
   return res
     .status(StatusCodes.OK)
     .json(new ApiResponse(StatusCodes.OK, { updatedProfileInformation }, 'Successfully profile updated!'));
+});
+
+export const updateUserAvatarImage = APIAsyncHandler(async (req, res) => {
+  const avatarImageFile = req.file?.path;
+  const userId = req.user?._id;
+
+  if (!avatarImageFile) throw new ApiError(StatusCodes.BAD_REQUEST, 'file is missing');
+
+  const avatarInstance = await uploadOnCloudinary(avatarImageFile);
+  if (!avatarInstance?.url) throw new ApiError(StatusCodes.CONFLICT, 'Error while uploading on server!');
+
+  const userUpdationQueryPayload: UpdateQuery<IUser> = {
+    $set: { avatar: avatarInstance.url },
+  };
+
+  const userInstance = await UserModel.findById(userId, userUpdationQueryPayload, { new: true }).select('-password');
+
+  return res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { user: userInstance }, 'Successfully avatar updated!'));
+});
+
+export const updateUserCoverImage = APIAsyncHandler(async (req, res) => {
+  const coverImageFile = req.file?.path;
+  const userId = req.user?._id;
+
+  if (!coverImageFile) throw new ApiError(StatusCodes.BAD_REQUEST, 'Image file is missing');
+
+  const coverImageInstance = await uploadOnCloudinary(coverImageFile);
+  if (!coverImageInstance?.url) throw new ApiError(StatusCodes.CONFLICT, 'Error while uploading on server!');
+
+  const userUpdationQueryPayload: UpdateQuery<IUser> = {
+    $set: { coverImage: coverImageInstance.url },
+  };
+
+  const userInstance = await UserModel.findById(userId, userUpdationQueryPayload, { new: true }).select('-password');
+
+  return res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { user: userInstance }, 'Successfully cover image updated!'));
 });

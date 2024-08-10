@@ -6,6 +6,8 @@ import {
   refreshAccessToken,
   registerUser,
   updateAccountDetails,
+  updateUserAvatarImage,
+  updateUserCoverImage,
 } from './user.controller';
 
 export const APIControllers = {
@@ -17,5 +19,7 @@ export const APIControllers = {
     currentUser: getCurrentUser,
     refreshToken: refreshAccessToken,
     updateProfile: updateAccountDetails,
+    updateAvatar: updateUserAvatarImage,
+    updateCover: updateUserCoverImage,
   },
 };

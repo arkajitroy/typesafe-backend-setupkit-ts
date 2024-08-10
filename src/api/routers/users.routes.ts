@@ -24,4 +24,18 @@ UserRouter.route('/reset-password').post(
 );
 UserRouter.route('/refresh-token').post(APIControllers.user.refreshToken);
 UserRouter.route('/current-user').get(verifyToken, APIControllers.user.currentUser);
-UserRouter.route('/update-account').patch(verifyToken, APIControllers.user.updateProfile);
+UserRouter.route('/update-account').patch(
+  verifyToken,
+  RouterMiddleware(routeValidators.users.updateProfile),
+  APIControllers.user.updateProfile,
+);
+UserRouter.route('/update-avatar').patch(
+  verifyToken,
+  uploadMiddleware.single('avatar'),
+  APIControllers.user.updateAvatar,
+);
+UserRouter.route('/update-cover').patch(
+  verifyToken,
+  uploadMiddleware.single('coverImage'),
+  APIControllers.user.updateCover,
+);
