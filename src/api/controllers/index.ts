@@ -1,6 +1,8 @@
 import {
   changeCurrentPassword,
   getCurrentUser,
+  getUserChannelProfile,
+  getWatchHistory,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -21,5 +23,7 @@ export const APIControllers = {
     updateProfile: updateAccountDetails,
     updateAvatar: updateUserAvatarImage,
     updateCover: updateUserCoverImage,
+    userChannelProfile: getUserChannelProfile,
+    watchHistory: getWatchHistory,
   },
 };

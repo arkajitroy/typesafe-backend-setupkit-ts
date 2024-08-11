@@ -39,3 +39,5 @@ UserRouter.route('/update-cover').patch(
   uploadMiddleware.single('coverImage'),
   APIControllers.user.updateCover,
 );
+UserRouter.route('/user-channel-profile-info').get(verifyToken, APIControllers.user.userChannelProfile);
+UserRouter.route('/watch-history').get(verifyToken, APIControllers.user.watchHistory);

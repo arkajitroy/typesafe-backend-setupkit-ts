@@ -228,3 +228,15 @@ export const getUserChannelProfile = APIAsyncHandler(async (req, res) => {
     .status(StatusCodes.OK)
     .json(new ApiResponse(StatusCodes.OK, { channel: channelInstance[0] }, 'User Channel fetched successfully!'));
 });
+
+export const getWatchHistory = APIAsyncHandler(async (req, res) => {
+  const userId = req.user?._id as Types.ObjectId;
+
+  const userWatchHistory = await service.users.getWatchHistoryService(userId);
+
+  return res
+    .status(StatusCodes.OK)
+    .json(
+      new ApiResponse(StatusCodes.OK, { watchHistory: userWatchHistory[0] }, 'Watch History fetched successfully!'),
+    );
+});
