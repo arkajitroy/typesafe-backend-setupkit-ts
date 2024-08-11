@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { Types, UpdateQuery } from 'mongoose';
+import { UpdateQuery } from 'mongoose';
 import { APIAsyncHandler } from '../../utils/APIAsyncHandler';
 import { UserModel } from '../../schemas';
 import { ApiError } from '../../utils/ErrorHandler';
@@ -215,10 +215,10 @@ export const updateUserCoverImage = APIAsyncHandler(async (req, res) => {
 
 export const getUserChannelProfile = APIAsyncHandler(async (req, res) => {
   const { username } = req.params;
-  const userId = req.user?._id as Types.ObjectId;
+  const userId = req.user?._id;
 
-  if (username?.trim() || !username) new ApiError(StatusCodes.NOT_FOUND, 'Username is missing!');
-  if (!userId) new ApiError(StatusCodes.UNAUTHORIZED, 'UserId is missing from the Authorize Token!');
+  if (username?.trim() || !username) throw new ApiError(StatusCodes.NOT_FOUND, 'Username is missing!');
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'UserId is missing from the Authorize Token!');
 
   const channelInstance = await service.users.getChannelByUsername(username, userId);
 
@@ -230,7 +230,9 @@ export const getUserChannelProfile = APIAsyncHandler(async (req, res) => {
 });
 
 export const getWatchHistory = APIAsyncHandler(async (req, res) => {
-  const userId = req.user?._id as Types.ObjectId;
+  const userId = req.user?._id;
+
+  if (!userId) throw new ApiError(StatusCodes.UNAUTHORIZED, 'UserId is missing from the Authorize Token!');
 
   const userWatchHistory = await service.users.getWatchHistoryService(userId);
 
