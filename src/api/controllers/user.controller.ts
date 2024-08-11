@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { UpdateQuery } from 'mongoose';
+import { Types, UpdateQuery } from 'mongoose';
 import { APIAsyncHandler } from '../../utils/APIAsyncHandler';
 import { UserModel } from '../../schemas';
 import { ApiError } from '../../utils/ErrorHandler';
@@ -13,6 +13,7 @@ import { IUser } from '../../@types/models/IUser';
 import { IAuthRequest } from '../../@types/others/TExpress';
 import { JWT_REFRESH_TOKEN_SECRET_KEY } from '../../config/app.config';
 import { TJWTDecodedToken } from '../../@types/others/TJwt';
+import { service } from '../services';
 
 export const registerUser = APIAsyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
@@ -210,4 +211,20 @@ export const updateUserCoverImage = APIAsyncHandler(async (req, res) => {
   return res
     .status(StatusCodes.OK)
     .json(new ApiResponse(StatusCodes.OK, { user: userInstance }, 'Successfully cover image updated!'));
+});
+
+export const getUserChannelProfile = APIAsyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const userId = req.user?._id as Types.ObjectId;
+
+  if (username?.trim() || !username) new ApiError(StatusCodes.NOT_FOUND, 'Username is missing!');
+  if (!userId) new ApiError(StatusCodes.UNAUTHORIZED, 'UserId is missing from the Authorize Token!');
+
+  const channelInstance = await service.users.getChannelByUsername(username, userId);
+
+  if (!channelInstance.length) throw new ApiError(StatusCodes.NOT_FOUND, 'Channel does not exists!');
+
+  return res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { channel: channelInstance[0] }, 'User Channel fetched successfully!'));
 });
