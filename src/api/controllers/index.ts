@@ -1,3 +1,4 @@
+import { applicationHealth, applicationRunning } from './app.controller';
 import {
   changeCurrentPassword,
   getCurrentUser,
@@ -13,6 +14,10 @@ import {
 } from './user.controller';
 
 export const APIControllers = {
+  application: {
+    running: applicationRunning,
+    health: applicationHealth,
+  },
   user: {
     register: registerUser,
     login: loginUser,
