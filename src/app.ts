@@ -5,15 +5,15 @@ import cookieParser from 'cookie-parser';
 import { Route } from './api/routers';
 import { requestLimiter } from './config/rateLimiter.config';
 import HTTPLogger from './config/HTTPLogger.config';
-import { corsConfig } from './config/cors.config';
 import { helmetConfig } from './config/helmet.config';
+import { corsMiddleware } from './config/cors.config';
 
 // constants
 const app = express();
 dotenv.config();
 
 // middlewares-configuration
-app.use(corsConfig);
+app.use(corsMiddleware);
 app.use(helmetConfig);
 app.use(express.json());
 app.use(compression());
@@ -26,4 +26,4 @@ app.use(requestLimiter);
 // Routing Configuration
 app.use('/api/v1', Route);
 
-export const AppServer = () => app;
+export const AppServer = app;

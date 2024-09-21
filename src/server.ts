@@ -14,7 +14,7 @@ const socketServer = useSocketIo(HTTPServer);
 // server connections
 dbConnect()
   .then(() => {
-    HTTPServer.listen(() => {
+    HTTPServer.listen(LOCAL_SERVER_PORT, () => {
       logger.info(`The Backend Server is running @${LOCAL_SERVER_PORT}`);
     });
 

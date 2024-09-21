@@ -1,8 +1,17 @@
-import cors from 'cors';
-import { CORS_RESTRICTED_ORIGIN } from './app.config';
+import cors, { CorsOptions } from 'cors';
+import { CORS_ALLOWED_ORIGIN } from './app.config';
 
-export const corsConfig = cors({
+export const corsConfig: CorsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
-  origin: CORS_RESTRICTED_ORIGIN,
+  origin: (origin, callback) => {
+    const allowedOrigins = CORS_ALLOWED_ORIGIN;
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-});
+};
+
+export const corsMiddleware = cors(corsConfig);
