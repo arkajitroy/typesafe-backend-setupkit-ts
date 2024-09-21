@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import helmet from 'helmet';
 
-const helmetConfig: RequestHandler[] = [
+export const helmetConfig: RequestHandler[] = [
   helmet(),
   helmet.contentSecurityPolicy({
     directives: {
@@ -16,5 +16,3 @@ const helmetConfig: RequestHandler[] = [
   helmet.hsts({ maxAge: 31536000, includeSubDomains: true, preload: true }),
   helmet.hidePoweredBy(),
 ];
-
-export default helmetConfig;
